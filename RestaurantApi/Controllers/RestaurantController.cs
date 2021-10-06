@@ -34,7 +34,7 @@ namespace RestaurantApi.Controllers
            var restaurantsDto = _restaurantService.GetAll();
             return Ok(restaurantsDto);
         }
-
+        //tesGit
         [HttpGet("{id}")]
         public ActionResult<RestaurantDto> Get([FromRoute] int id){
 
