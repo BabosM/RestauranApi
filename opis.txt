@@ -1,0 +1,40 @@
+RESTAURANT API
+aplikacja web api która łączy się z bazą ms sql, wykorzystuje autentykacje i autoryzacje uzytkowników.
+Zadaniem tej aplikacji jest rejestracja oraz logowanie uzytkowników a jej główną funkcjonalnością jest zarządzanie restauracjami = tworzenie oraz zarzadzanie restaukacjami
+Typowy projekt webowy napisany w dotnet core,
+- W projekcie jest autentykacja za pomocą tokenów Jwt, 
+- Projket posiada również autoryzację. Dla pewnych akcji użytkownicy będą musieli spełniać dodatkowe wymogi.
+- Walidacja podelu uzytkownika znajduje się w dodatkowej klasie odpowiadajacej tylko za walidacje.
+
+
+W trakcie kursu:
+
+- stworzysz aplikację, która zgodnie z architekturą REST będzie: czytać, tworzyć, modyfikować lub usuwać dane z serwera
+
+- wyślesz zapytania do bazy danych z kodu za pomocą ORM (Entity Framework Core)
+
+- utworzysz bazę danych MS SQL w oparciu o klasy w C#
+
+- zwalidujesz przychodzące modele i zwracać odpowiednie komunikaty w przypadku nieprawidłowości
+
+- użyjesz automatycznego mapowania
+
+- użyjesz wbudowanego kontenera, aby wstrzyknąć zależności
+
+- zarejestrujesz błędy lub określone informacje w pliku tekstowym
+
+- utworzysz dokumentację (za pomocą narzędzia Swagger)
+
+- skonfigurujesz NLogger
+
+- użyjesz Postmana, aby korzystać z internetowego interfejsu API
+
+- zautentykujesz użytkowników użytkowników za pomocą tokenów JWT
+
+- stwórz własne zasady autoryzacji
+
+- utworzysz tabele użytkowników i jednostek ról
+
+- zabezpieczysz hasła użytkowników za pomocą hashy
+
+- dowiesz się jak autoryzować na podstawie roszczenia użytkownika i jego wartości
