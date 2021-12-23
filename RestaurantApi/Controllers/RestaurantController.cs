@@ -6,7 +6,7 @@ using RestaurantApi.Entities;
 using RestaurantApi.Models;
 using Microsoft.EntityFrameworkCore;
 using RestaurantApi.Services;
-using RestaurantApi.models;
+using RestaurantApi.models; 
 
 namespace RestaurantApi.Controllers
 {

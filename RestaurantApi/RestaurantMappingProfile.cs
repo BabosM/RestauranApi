@@ -1,5 +1,6 @@
 using AutoMapper;
 using RestaurantApi.Entities;
+using RestaurantApi.models;
 using RestaurantApi.Models;
 
 namespace RestaurantApi
@@ -19,6 +20,7 @@ namespace RestaurantApi
                 .ForMember(m => m.Address, 
                         c => c.MapFrom(dto => new Address()
                                             {City = dto.City,PostalCode = dto.PostalCode, Street = dto.Street}));
+            CreateMap<CreateDishDto, Dish>(); // name of variables are the same so one line of code is ok
 
        } 
     }
