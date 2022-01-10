@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using RestaurantApi.Authorization;
 using RestaurantApi.Entities;
 using RestaurantApi.Middleware;
 using RestaurantApi.models;
@@ -56,8 +58,16 @@ namespace RestaurantApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
                 };
             });
-            
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "German", "Polish"));
+                option.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20)));
+                option.AddPolicy("Atleast2restaurants", builder => builder.AddRequirements(new CreatedMultipeRestaurantRequirement(2)));
+            });
 
+            services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHendler> ();
+            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
+            services.AddScoped<IAuthorizationHandler, CreatedMultipeRestaurantRequirementHendler>();
             services.AddControllers().AddFluentValidation();
             services.AddDbContext<RestaurantDbContext>();
             services.AddScoped<RestaurantSeeder>();
@@ -69,6 +79,8 @@ namespace RestaurantApi
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<IUserContextService, UserContextService>();
+            services.AddHttpContextAccessor(); // dzieki temu jestesmy w stanie wstrzyknac do klasy  userContextService referencje do obiektu IHttpContextAccessor
             services.AddSwaggerGen();
         }
 
@@ -89,9 +101,9 @@ namespace RestaurantApi
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurant API");
             });
-            app.UseRouting();
-
-
+            app.UseRouting();         
+            // the place for adding autorization
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
