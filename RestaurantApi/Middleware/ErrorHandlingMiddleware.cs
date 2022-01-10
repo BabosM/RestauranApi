@@ -20,7 +20,13 @@ namespace RestaurantApi.Middleware
             {
                 await next.Invoke(context);
             }
-            catch(BadRequestException badRequestException)
+            catch (ForbidException forbidException)
+            {
+              //  _logger.LogError(forbidException, forbidException.Message);
+                context.Response.StatusCode = 403;
+               // await context.Response.WriteAsync("Something went wrong");
+            }
+            catch (BadRequestException badRequestException)
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(badRequestException.Message);
@@ -34,9 +40,8 @@ namespace RestaurantApi.Middleware
                 _logger.LogError(e, e.Message);
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync("Something went wrong");
-
-
             }
+           
         }
     }
 }

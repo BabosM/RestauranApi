@@ -3,6 +3,7 @@ using RestaurantApi.Entities;
 using RestaurantApi.models;
 using RestaurantApi.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace RestaurantApi.Services
 {
@@ -13,6 +14,7 @@ namespace RestaurantApi.Services
 
         int Create(CreateRestaurantDto dto);
         void Delete(int id);
+        void Update(int id, UpdateRestaurantDto dto);
         IEnumerable<RestaurantDto> GetAll();
         RestaurantDto GetById(int id);
         void Put(UpdateRestaurantDto dto, int id);
