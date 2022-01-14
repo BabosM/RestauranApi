@@ -6,11 +6,15 @@ using RestaurantApi.Entities;
 using RestaurantApi.Models;
 using Microsoft.EntityFrameworkCore;
 using RestaurantApi.Services;
-using RestaurantApi.models; 
+using RestaurantApi.models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace RestaurantApi.Controllers
 {
     [Route("api/restaurant")]
+    [ApiController]
+ 
     public class RestaurantController : ControllerBase
     {  
        
@@ -18,12 +22,14 @@ namespace RestaurantApi.Controllers
         public RestaurantController(IRestaurantService restaurantService){
             _restaurantService = restaurantService;
         }
-     
+        
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto){
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
+            var userId = int.Parse( User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var createdRestaurantId = _restaurantService.Create(dto);
             return Created($"api/restaurant/{createdRestaurantId}", null);
         }
@@ -32,12 +38,14 @@ namespace RestaurantApi.Controllers
      //  [Authorize(Policy = "Atleast2restaurants")]
         public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] RestaurantQuery query){
 
+
             
 
            var restaurantsDto = _restaurantService.GetAll(query);
             return Ok(restaurantsDto);
         }
         [HttpGet("{id}")]
+        [Authorize(Policy = "HasNationality")]
         public ActionResult<RestaurantDto> Get([FromRoute] int id){
 
             var restaurantDto = _restaurantService.GetById(id);   
@@ -57,7 +65,7 @@ namespace RestaurantApi.Controllers
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             } 
-            _restaurantService.Put(dto, id);        
+            _restaurantService.Update(id, dto);        
             return Ok();
                 
         }
