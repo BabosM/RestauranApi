@@ -28,13 +28,15 @@ namespace RestaurantApi.Controllers
             return Created($"api/restaurant/{createdRestaurantId}", null);
         }
         [HttpGet]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll(){
+
+     //  [Authorize(Policy = "Atleast2restaurants")]
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] RestaurantQuery query){
+
             
 
-           var restaurantsDto = _restaurantService.GetAll();
+           var restaurantsDto = _restaurantService.GetAll(query);
             return Ok(restaurantsDto);
         }
-        //tesGit
         [HttpGet("{id}")]
         public ActionResult<RestaurantDto> Get([FromRoute] int id){
 
