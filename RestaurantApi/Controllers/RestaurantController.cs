@@ -39,7 +39,7 @@ namespace RestaurantApi.Controllers
         public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] RestaurantQuery query){
 
 
-            
+  
 
            var restaurantsDto = _restaurantService.GetAll(query);
             return Ok(restaurantsDto);
@@ -64,8 +64,8 @@ namespace RestaurantApi.Controllers
         public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id) {
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
-            } 
-            _restaurantService.Update(id, dto);        
+            }
+            _restaurantService.Put(dto, id);      
             return Ok();
                 
         }
