@@ -14,8 +14,8 @@ namespace RestaurantApi.Services
 
         int Create(CreateRestaurantDto dto);
         void Delete(int id);
-        void Update(int id, UpdateRestaurantDto dto);
-        IEnumerable<RestaurantDto> GetAll();
+        PagedResult<RestaurantDto> GetAll( RestaurantQuery query);
+
         RestaurantDto GetById(int id);
         void Put(UpdateRestaurantDto dto, int id);
     }

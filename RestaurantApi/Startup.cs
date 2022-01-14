@@ -21,6 +21,7 @@ using RestaurantApi.Entities;
 using RestaurantApi.Middleware;
 using RestaurantApi.models;
 using RestaurantApi.models.Validators;
+using RestaurantApi.Models;
 using RestaurantApi.Services;
 
 
@@ -78,15 +79,29 @@ namespace RestaurantApi
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+            services.AddScoped<IValidator<RestaurantQuery>, RestaurantQueryValidator>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor(); // dzieki temu jestesmy w stanie wstrzyknac do klasy  userContextService referencje do obiektu IHttpContextAccessor
             services.AddSwaggerGen();
+            services.AddCors(option =>
+            {
+                option.AddPolicy("FrontEndClien", builder =>               
+                    builder.AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .WithOrigins("")
+                   );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RestaurantSeeder seeder)
         {
+            app.UseResponseCaching();
+            // app bedzie w stanie serwowac pliki z domyslnego folderu ktory musi sie znajdowac w glownym folderze aplikacji
+            // powinno byc na poczatku poniewaz nasze api bedzie sprawdzac dla danego zapytania czy pod sciezka ktora dodal klient przypadkiem nie istatenie jakis plik 
+            app.UseStaticFiles();
+            app.UseCors(Configuration["AllowedOrigins"]);
             seeder.Seed();
             if (env.IsDevelopment())
             {
