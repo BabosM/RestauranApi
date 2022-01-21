@@ -16,6 +16,13 @@ namespace  RestaurantApi
         public void Seed(){
             if(_dbContext.Database.CanConnect()){
 
+
+                // 4 linie kodu ktore sprawily ze baza danych zostala poprawnie zmigrowana
+                var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+                if(pendingMigrations != null && pendingMigrations.Any())
+                {
+                    _dbContext.Database.Migrate();
+                }
                 if (!_dbContext.Roles.Any())
                 {
                     var roles = GetRoles();
