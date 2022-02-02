@@ -14,27 +14,31 @@ namespace  RestaurantApi
 	}
         
         public void Seed(){
-            if(_dbContext.Database.CanConnect()){
-
-
-                // 4 linie kodu ktore sprawily ze baza danych zostala poprawnie zmigrowana
-                var pendingMigrations = _dbContext.Database.GetPendingMigrations();
-                if(pendingMigrations != null && pendingMigrations.Any())
+            if(_dbContext.Database.CanConnect())
+            {
+                // musi być sprawdzony warunek ponieważ testy korzystają z nierelacyjnej bazy
+                if (_dbContext.Database.IsRelational())
                 {
-                    _dbContext.Database.Migrate();
-                }
-                if (!_dbContext.Roles.Any())
-                {
-                    var roles = GetRoles();
-                    _dbContext.AddRange(roles);
-                    _dbContext.SaveChanges();
-                }
-                if(!_dbContext.Restaurants.Any()){
+
+                    // 4 linie kodu ktore sprawily ze baza danych zostala poprawnie zmigrowana
+                    var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+                    if(pendingMigrations != null && pendingMigrations.Any())
+                    {
+                        _dbContext.Database.Migrate();
+                    }
+                    if (!_dbContext.Roles.Any())
+                    {
+                        var roles = GetRoles();
+                        _dbContext.AddRange(roles);
+                        _dbContext.SaveChanges();
+                    }
+                    if(!_dbContext.Restaurants.Any()){
                     
-                   var restaurants = GetRestaurants(); 
-                    _dbContext.Restaurants.AddRange(restaurants);
-                    _dbContext.SaveChanges();
+                       var restaurants = GetRestaurants(); 
+                        _dbContext.Restaurants.AddRange(restaurants);
+                        _dbContext.SaveChanges();
                     
+                    }
                 }
             }
 
