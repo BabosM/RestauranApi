@@ -21,8 +21,8 @@ namespace RestaurantApi.Middleware
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             _stopWatch.Start();
-            await next.Invoke(context);
-            _stopWatch.Stop();
+            await next.Invoke(context)
+            _stopWatch.Stop()
 
             var duration = _stopWatch.ElapsedMilliseconds;
             if(duration / 1000 > 4)
